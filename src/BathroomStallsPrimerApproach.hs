@@ -73,16 +73,16 @@ updateStalls = undefined
 
 processForPerson :: [Stall] -> [Stall]
 processForPerson = undefined 
-	-- let stallDistances = getDistances stalls 
-	-- --(stall, (int, int))
-	-- let maximalsOfMinDistances = maximalsOf(minDistances(stallDistances))
-	-- -- let maximalsOfMaxDistances = maximalsOf(maxDistances(stallDistances))
-	-- -- let leftMost = chooseLeftMost(maxDistances)
-	-- if (length maximalsOfMinDistances) == 1
-	-- 	then getDistances(updateStalls(head minDistances) stalls)
-	-- 	else if (length maxDistances) == 1
-	-- 			then head maxDistances
-	-- 			else leftMost
+	let stallDistances = getDistances stalls 
+	--(stall, (int, int))
+	let maximalsOfMinDistances = maximalsOf(minDistances(stallDistances))
+	-- let maximalsOfMaxDistances = maximalsOf(maxDistances(stallDistances))
+	-- let leftMost = chooseLeftMost(maxDistances)
+	if (length maximalsOfMinDistances) == 1
+		then getDistances(updateStalls(head minDistances) stalls)
+		else if (length maxDistances) == 1
+				then head maxDistances
+				else leftMost
 
 
 --Recibe una tupla con una cantidad de stalls y una cantidad de personas, y la procesa, retornando una tupla que en la primer coordenada tiene
@@ -104,4 +104,4 @@ processFile (item : items) = processBathroom item : processFile items
 
 
 processInput :: [String] -> [String]
-processInput = undefined
+processInput xs = 
