@@ -15,47 +15,86 @@ data Section = Section Integer
 
 type Stalls = Map Section Integer
 
-sacarUnaSeccionTipo :: Section -> Stalls -> Stalls
-sacarUnaSeccionTipo section stalls =
-  Map.update (\n -> if n <= 1 then Nothing else Just $ n - 1) section stalls
 
-agregarNuevaSeccion :: Section -> Stalls -> Stalls
-agregarNuevaSeccion section stalls =
+deleteSection :: Section -> Stalls -> Stalls
+deleteSection section stalls =
+  Map.update (\value -> if value <= 1 then Nothing else Just $ value - 1) section stalls
+
+
+addNewSection :: Section -> Stalls -> Stalls
+addNewSection section stalls =
   Map.insertWith (\new old -> old + new) section 1 stalls
+
 
 findStall :: Stalls -> Stalls
 findStall stalls =
   let
-    (maximaSeccion, _) = Map.findMax stalls
-    (seccionIzq, seccionDerecha) = splitSection maximaSeccion
-    seccionesFinales =
-      agregarNuevaSeccion seccionDerecha $
-      agregarNuevaSeccion seccionIzq $
-      sacarUnaSeccionTipo maximaSeccion $
+    (bigestSection, _) = Map.findMax stalls
+    (leftSection, rightSection) = splitSection bigestSection
+    newStalls =
+      addNewSection rightSection $
+      addNewSection leftSection $
+      deleteSection bigestSection $
       stalls
-  in seccionesFinales
+  in newStalls
+
 
 splitSection :: Section -> (Section, Section)
-splitSection section =
-  getDistances section
+splitSection section = getDistances section
+
 
 getDistances :: Section -> (Section, Section)
 getDistances (Section n) =
   (Section $ floor ((toRational n - 1) / 2), Section $ ceiling ((toRational n - 1) / 2))
 
-resolverProblema :: Integer -> Integer -> (Section, Section)
-resolverProblema cantidadDeBaños cantidadDeGente =
-  let
-    stallsDespuesDeTodosMenosUno =
-      foldl' (\stalls n -> findStall stalls) (Map.singleton (Section cantidadDeBaños) 1) [1..(cantidadDeGente - 1)]
-    (distanciaIzq, distanciaDerecha) = splitSection . fst . Map.findMax $ stallsDespuesDeTodosMenosUno
-  in (distanciaDerecha, distanciaIzq)
+
+getLastPersonDistances :: Integer -> Integer -> (Section, Section)
+getLastPersonDistances stallsNumber peopleNumber =
+  let 
+    allStallsExceptOne =
+      foldl' (\stalls n -> findStall stalls) (Map.singleton (Section stallsNumber) 1) [1..(peopleNumber - 1)]
+    (distanceToLeft, distanceToRight) = splitSection . fst . Map.findMax $ allStallsExceptOne
+  in (distanceToRight, distanceToLeft)
+
+
+stringListToListOfIntTuples :: [String] -> [(Integer, Integer)]
+stringListToListOfIntTuples [] = []
+stringListToListOfIntTuples (x:y:xs) = (read x, read y) : stringListToListOfIntTuples xs
+
+
+solveForAll :: [(Integer, Integer)] -> [String]
+solveForAll [] = []
+solveForAll (x:xs) = getResultInText x : solveForAll xs 
+      where getResultInText (y,z) = sectionTupleToString $ getLastPersonDistances y z
+ 
+      
+processInput :: [String] -> [String]
+processInput pairStallsPeople = 
+  let listOfPairsWithStallsPeople = stringListToListOfIntTuples $ words $ intercalate " " pairStallsPeople
+  in solveForAll listOfPairsWithStallsPeople
+
+
+addWordToTheBeginning :: String -> Integer -> [String] -> [String]
+addWordToTheBeginning _ _ [] = []
+addWordToTheBeginning word cases (x:xs) = (word ++ (show cases) ++ ": " ++ x) : addWordToTheBeginning (cases + 1) xs
+
+
+sectionToString :: Section -> String
+sectionToString (Section section) = show section
+
+
+sectionTupleToString :: (Section, Section) -> String
+sectionTupleToString (Section x, Section y) = tupleToString (x, y)
+
+
+tupleToString :: (Integer, Integer) -> String
+tupleToString (x, y) = show x ++ " " ++ show y
+
 
 main :: IO ()
 main = do  
     putStrLn "Ingresar el nombre del archivo a utilizar como input: "  
     fileName <- getLine  
-    putStrLn $ "Por ahora, ingresaste el siguiente del archivo: " ++ fileName
     -- withFile abre el archivo y cierra luego de usarlo
     withFile    (fileName ++ ".txt") 
                 ReadMode 
@@ -64,11 +103,9 @@ main = do
                             -- Obtiene el contenido del archivo
                             content <- hGetContents handle  
                             let contentLines = lines content
-                            -- Manipula los datos
-                                solution = processInput (drop 1 contentLines) 
+                            let solution = processInput (drop 1 contentLines)
                             -- Imprime el output y salva el nuevo archivo con el output
-                            let newContent = unlines solution
+                            let newContent = unlines $ addWordToTheBeginning "Case #" 1 solution
                             putStr newContent
                             writeFile (fileName ++ "_solved.txt") newContent
                     )
-

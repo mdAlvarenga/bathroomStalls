@@ -1,8 +1,10 @@
--- This file has been generated from package.yaml by hpack version 0.28.2.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f66f721de882fd171441efde74cbf87416a56fed0c327e81e1e4cd9ee93471ae
+-- hash: a866bd1488bff46d3b897b8951a27407c348d33a9f74ec93f0e12ff4d8bd6086
 
 name:           bathroomStalls
 version:        0.1.0.0
@@ -14,14 +16,12 @@ copyright:      2018 Author name here
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
 extra-source-files:
     README.md
 
 executable bathroomStalls
   main-is: BathroomStall.hs
   other-modules:
-      BathroomStallsPrimerApproach
       Paths_bathroomStalls
   hs-source-dirs:
       src
