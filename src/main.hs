@@ -32,6 +32,9 @@
 
 
 -- ////////////////////////
+import System.IO
+import BathroomStalls
+
 main = do  
     putStrLn "Ingresar el nombre del archivo a utilizar como input: "  
     fileName <- getLine  
