@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8755a51592014742c1b77ff078ecdbbdbe101019b8a886e24161318979398055
+-- hash: f66f721de882fd171441efde74cbf87416a56fed0c327e81e1e4cd9ee93471ae
 
 name:           bathroomStalls
 version:        0.1.0.0
@@ -18,9 +18,10 @@ cabal-version:  >= 1.10
 extra-source-files:
     README.md
 
-executable marcos
+executable bathroomStalls
   main-is: BathroomStall.hs
   other-modules:
+      BathroomStallsPrimerApproach
       Paths_bathroomStalls
   hs-source-dirs:
       src

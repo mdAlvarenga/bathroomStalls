@@ -1,4 +1,4 @@
-module Main where
+module BathroomStall where
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 import           Data.Text (Text)

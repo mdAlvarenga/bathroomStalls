@@ -1,4 +1,4 @@
-module BathroomStalls where 
+module BathroomStallsPrimerApproach where 
 
 type Stall = (Bool, Int) --Tupla en la que la 1er componente indica si esta ocupada o no, y la 2da indica su posicion en el baño.
 
