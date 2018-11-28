@@ -76,7 +76,7 @@ processInput pairStallsPeople =
 
 addWordToTheBeginning :: String -> Integer -> [String] -> [String]
 addWordToTheBeginning _ _ [] = []
-addWordToTheBeginning word cases (x:xs) = (word ++ (show cases) ++ ": " ++ x) : addWordToTheBeginning (cases + 1) xs
+addWordToTheBeginning word cases (x:xs) = (word ++ (show cases) ++ ": " ++ x) : addWordToTheBeginning word (cases + 1) xs
 
 
 sectionToString :: Section -> String
